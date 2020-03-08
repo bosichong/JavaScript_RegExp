@@ -33,14 +33,6 @@ let prodConfig = {
 					use: ["css-loader", "less-loader"]
 				})
 			},
-			{
-				test: /\.(scss|sass)$/,
-
-				use: extractTextPlugin.extract({
-					fallback:"style-loader",
-					use: ["css-loader", "sass-loader"]
-				})
-			}
         ]
 
 	},

@@ -15,7 +15,7 @@ module.exports = {
     },
     externals: {
         jquery: 'jQuery'
-      },
+    },
     module: {
         rules: [{
                 test: /\.(png|jpg|jpeg|gif)$/i,
@@ -44,12 +44,40 @@ module.exports = {
                 //解析.vue文件
                 test: /\.vue$/,
                 use: 'vue-loader'
-            }
+            },
+            {
+                test: /\.ttf|woff|woff2|eot|svg$/,
+                use: 'url-loader'
+            }, // 处理 样式中字体文件路径的问题
+            {
+                test: /\.s(c|a)ss$/,
+                use: [
+                  'vue-style-loader',
+                  'css-loader',
+                  {
+                    loader: 'sass-loader',
+                    // Requires sass-loader@^7.0.0
+                    options: {
+                      implementation: require('sass'),
+                      fiber: require('fibers'),
+                      indentedSyntax: true // optional
+                    },
+                    // Requires sass-loader@^8.0.0
+                    options: {
+                      implementation: require('sass'),
+                      sassOptions: {
+                        fiber: require('fibers'),
+                        indentedSyntax: true // optional
+                      },
+                    },
+                  },
+                ],
+              },
         ]
 
     },
-    resolve:{
-        alias:{
+    resolve: {
+        alias: {
             // 'vue$':'vue/dist/vue.js'
         }
     },

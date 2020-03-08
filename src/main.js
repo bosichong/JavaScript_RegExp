@@ -1,25 +1,24 @@
 //导入Vue
 import Vue from "vue";
 
-//导入路由配置
-import VueRouter from "vue-router";
-
-// 安装路由
-Vue.use(VueRouter);
-
 import App from "./components/App.vue";
-import router from './router';
 
-//导入 cdn的jQuery
-import $ from 'jquery';
+// import ViewUI from 'view-design';
+// import 'view-design/dist/styles/iview.css';
+// Vue.use(ViewUI);
 
+// 引入Vuetify组件
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+Vue.use(Vuetify)
+// vuetify 自定义配置
+var vuetify = new Vuetify({})
 
 
 var vm = new Vue({
     el: '#app',
     render: c => c(App),
-    router
+    vuetify
 
 });
 
-$('#root').css('background-color','red');
