@@ -32,7 +32,7 @@
 
     <v-content>
       <div class="d-block">
-        <v-textarea type="text" label="待匹配的文本" v-model:value="textSour" @input="reptest"></v-textarea>
+        <v-textarea type="text" label="待匹配的文本" v-model="textSour" @input="reptest"></v-textarea>
       </div>
 
       <div class="d-block">
@@ -41,19 +41,27 @@
             <v-text-field type="text" label="正则表达式" v-model="textPattern" @input="reptest"></v-text-field>
           </v-col>
           <v-col cols="12" md="1">
-            <v-checkbox v-model="rep_g" label="G" required></v-checkbox>
+            <v-checkbox v-model="rep_g" label="G" required @change="reptest"></v-checkbox>
           </v-col>
           <v-col cols="12" md="1">
-            <v-checkbox v-model="rep_i" label="I" required></v-checkbox>
+            <v-checkbox v-model="rep_i" label="I" required @change="reptest"></v-checkbox>
           </v-col>
           <v-col cols="12" md="1">
-            <v-checkbox v-model="rep_m" label="M" required></v-checkbox>
+            <v-checkbox v-model="rep_m" label="M" required @change="reptest"></v-checkbox>
           </v-col>
         </v-row>
       </div>
 
       <div class="d-block">
         <v-textarea type="text" label="匹配结果" v-model="textMatchResult"></v-textarea>
+      </div>
+
+      <div class="d-block">
+        <v-text-field type="text" label="替换文本" v-model="textReplace" @input="reptest"></v-text-field>
+      </div>
+
+      <div class="d-block">
+        <v-textarea type="text" label="替换结果" v-model="textReplaceResult"></v-textarea>
       </div>
     </v-content>
 
@@ -70,10 +78,12 @@ export default {
   },
 
   data: () => ({
-    drawer: false,
+    drawer: true,
     textSour: "",
     textPattern: "",
     textMatchResult: "",
+    textReplace: "",
+    textReplaceResult: "",
     rep_g: true,
     rep_i: false,
     rep_m: false
@@ -85,28 +95,34 @@ export default {
       if (this.rep_i) op = op + "i";
       if (this.rep_m) op = op + "m";
       console.log(this.textSour);
-      
+
       var regex = new RegExp(this.textPattern, op); //创建RegExp对象。
       var result = this.textSour.match(regex);
       console.log(result);
-      
 
       // 如果没有匹配提示信息
-      if (null == result || 0 == result.length) {
+      if ("" == this.textPattern || null == result || 0 == result.length) {
         this.textMatchResult = "（没有匹配）";
         return false;
       }
 
       if (this.rep_g) {
         var strResult = "共找到 " + result.length + " 处匹配：\r\n";
-        for (var i = 0; i < result.length; ++i){
-            strResult = strResult + result[i] + "\r\n";
+        for (let i = 0; i < result.length; ++i) {
+          strResult = strResult + result[i] + "\r\n";
         }
-        
+
         this.textMatchResult = strResult;
       } else {
         this.textMatchResult =
           "匹配位置：" + regex.lastIndex + "\r\n匹配结果：" + result[0];
+      }
+      //如果可以替换字符，则替换。
+
+      if (this.textReplace == "") {
+        this.textReplaceResult = "";
+      } else {
+        this.textReplaceResult = this.textSour.replace(regex, this.textReplace);
       }
     }
   },
