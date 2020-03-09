@@ -1,34 +1,92 @@
 
 <template>
   <v-app id="inspire">
+    <v-app-bar app clipped-left clipped-right>
+      <!-- 顶部导航 ico -->
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <!-- 顶部导航文字 -->
+      <v-toolbar-title>JavaScript_RegExp</v-toolbar-title>
+    </v-app-bar>
     <!-- 左侧抽屉导航 -->
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
-        <v-list-item link>
+        <v-list-item link @click.stop="abme_dialog=true">
           <v-list-item-action>
             <v-icon>mdi-human-greeting</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>关于我</v-list-item-title>
+            <v-list-item-title >关于我</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link @click.stop="app_dialog=true">
           <v-list-item-action>
             <v-icon>mdi-application</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>关于本程序</v-list-item-title>
+            <v-list-item-title >关于本程序</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+      <v-divider></v-divider>
 
-    <v-app-bar app clipped-left>
-      <!-- 顶部导航 ico -->
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <!-- 顶部导航文字 -->
-      <v-toolbar-title>Vue_Vuetify_RegExp</v-toolbar-title>
-    </v-app-bar>
+<!-- 关于我提示框 -->
+      <v-dialog
+      v-model="abme_dialog"
+      max-width="320"
+    >
+      <v-card>
+        <v-card-title class="headline">About Me</v-card-title>
+
+        <v-card-text>
+            <p>关于我？真的没什么好说的，如果你喜欢编程，喜欢Python或是JavaScript那我们就是朋友了。</p>
+            <p>Python/Javascript学习QQ群号：217840699</p>
+          
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="abme_dialog = false"
+          >
+            Close Dialog
+          </v-btn>
+
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
+    <!-- 关于本程序的提示框 -->
+      <v-dialog
+      v-model="app_dialog"
+      max-width="320"
+    >
+      <v-card>
+        <v-card-title class="headline">About App</v-card-title>
+
+        <v-card-text>
+            本程序纯粹是为了学习Vue、webpack、Vuetify，一个重复制造轮子的的实践。欢迎大家交流学习。
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="app_dialog = false"
+          >
+            Close Dialog
+          </v-btn>
+
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    </v-navigation-drawer>
 
     <v-content>
       <div class="d-block">
@@ -41,19 +99,34 @@
             <v-text-field type="text" label="正则表达式" v-model="textPattern" @input="reptest"></v-text-field>
           </v-col>
           <v-col cols="12" md="1">
-            <v-checkbox v-model="rep_g" label="G" required @change="reptest"></v-checkbox>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-checkbox v-model="rep_g" label="G" required @change="reptest" v-on="on"></v-checkbox>
+              </template>
+              <span>全局匹配</span>
+            </v-tooltip>
           </v-col>
           <v-col cols="12" md="1">
-            <v-checkbox v-model="rep_i" label="I" required @change="reptest"></v-checkbox>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-checkbox v-model="rep_i" label="I" required @change="reptest" v-on="on"></v-checkbox>
+              </template>
+              <span>忽略大小写</span>
+            </v-tooltip>
           </v-col>
           <v-col cols="12" md="1">
-            <v-checkbox v-model="rep_m" label="M" required @change="reptest"></v-checkbox>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-checkbox v-model="rep_m" label="M" required @change="reptest" v-on="on"></v-checkbox>
+              </template>
+              <span>多行匹配</span>
+            </v-tooltip>
           </v-col>
         </v-row>
       </div>
 
       <div class="d-block">
-        <v-textarea type="text" label="匹配结果" v-model="textMatchResult"></v-textarea>
+        <v-textarea type="text" label="匹配结果" v-model="textMatchResult" disabled></v-textarea>
       </div>
 
       <div class="d-block">
@@ -61,12 +134,12 @@
       </div>
 
       <div class="d-block">
-        <v-textarea type="text" label="替换结果" v-model="textReplaceResult"></v-textarea>
+        <v-textarea type="text" label="替换结果" v-model="textReplaceResult" disabled></v-textarea>
       </div>
     </v-content>
 
     <v-footer app>
-      <span>&copy; 2019</span>
+      <span>&copy; 2020 By J.sky Python/Javascript学习QQ群号：217840699 </span>
     </v-footer>
   </v-app>
 </template>
@@ -79,6 +152,8 @@ export default {
 
   data: () => ({
     drawer: true,
+    abme_dialog:false,
+    app_dialog:false,
     textSour: "",
     textPattern: "",
     textMatchResult: "",
@@ -89,16 +164,19 @@ export default {
     rep_m: false
   }),
   methods: {
+    itemck: function(regex) {
+      console.log(regex);
+    },
     reptest: function() {
       var op = ""; //组装正则表达式修饰符
       if (this.rep_g) op = "g";
       if (this.rep_i) op = op + "i";
       if (this.rep_m) op = op + "m";
-      console.log(this.textSour);
+    //   console.log(this.textSour);
 
       var regex = new RegExp(this.textPattern, op); //创建RegExp对象。
       var result = this.textSour.match(regex);
-      console.log(result);
+    //   console.log(result);
 
       // 如果没有匹配提示信息
       if ("" == this.textPattern || null == result || 0 == result.length) {
@@ -131,6 +209,14 @@ export default {
     this.$vuetify.theme.dark = true;
   }
 };
+
+console.error("关于我？真的没什么好说的，如果你喜欢编程，喜欢Python或是JavaScript那我们就是朋友了。");
+console.error("本程序纯粹是为了学习Vue、webpack、Vuetify，一个重复制造轮子的的实践。欢迎大家交流学习。");
+console.error("Python/Javascript学习QQ群号：217840699");
+
+
+
+
 </script>
 
 
